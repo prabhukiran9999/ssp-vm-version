@@ -6,6 +6,11 @@
       become: true
       become_user: root
       shell: yum install -y git
+      
+    - name: Owning ssm-user directory
+      become: true
+      become_user: root
+      shell: sudo chown -R ssm-user:ssm-user /home/ssm-user/
 
     #- name: cloning the repo
       #git:
