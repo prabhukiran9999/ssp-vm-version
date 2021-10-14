@@ -7,13 +7,13 @@
       become_user: root
       shell: yum install -y git
 
-    - name: cloning the repo
-      git:
-       repo: https://github.com/prabhukiran9999/ssp-vm-version.git
-       dest: /home/ssm-user/repos/
-       clone: yes
-       update: yes
-       force: yes
+    #- name: cloning the repo
+      #git:
+       #repo: https://github.com/prabhukiran9999/ssp-vm-version.git
+       #dest: /home/ssm-user/repos/
+       #clone: yes
+       #update: yes
+       #force: yes
 
     - name: install curl
       yum:
