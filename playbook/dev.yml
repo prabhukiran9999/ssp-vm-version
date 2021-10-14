@@ -85,7 +85,7 @@
       shell: chown -R root:nginx /var/www/app
 
     - name: make the build package
-      local_action: shell tar -c -z -f app.zip -C ../repos/client/build .
+      local_action: shell tar -c -z -f app.zip -C ../client/build .
       become: no
 
     - name: Copy build package
@@ -100,13 +100,13 @@
 
     - name: Copy nginx config files
       copy:
-        src: "../repos/files/nginx.conf"
+        src: "../files/nginx.conf"
         dest: "/etc/nginx/nginx.conf"
         mode: 0644
 
     - name: Update client nginx config  
       copy:
-        src: "../repos/files/client.conf"
+        src: "../files/client.conf"
         dest: "/etc/nginx/conf.d/client.conf"
         mode: 0644
 
