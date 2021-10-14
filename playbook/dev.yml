@@ -1,0 +1,120 @@
+---
+ - hosts: localhost
+   become: true
+   tasks:
+    - name: install git
+      become: true
+      become_user: root
+      shell: yum install -y git
+
+    - name: cloning the repo
+      git:
+       repo: https://github.com/prabhukiran9999/ssp-vm-version.git
+       dest: /home/ssm-user/repos/
+       clone: yes
+       update: yes
+       force: yes
+
+    - name: install curl
+      yum:
+        name: curl
+        state: present
+    - name: install epel
+      become: true
+      become_user: root
+      shell: amazon-linux-extras install epel
+
+    - name: install nginx
+      become: true
+      become_user: root
+      shell: sudo amazon-linux-extras install nginx1
+
+    - name: starting nginx server
+      become: true
+      become_user: root
+      shell: systemctl start nginx.service
+
+    - name: downloading the node.js
+      become: true
+      become_user: root
+      shell: curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
+
+    - name: installing the nodejs
+      become: true
+      become_user: root
+      shell: yum install -y nodejs
+
+    - name: Install the frontend dependencies
+      command: npm install
+      args:
+       chdir: /home/ssm-user/repos/client
+       executable: /bin/bash
+    - name: Build the frontend
+      command: npm run build
+      args:
+       chdir: /home/ssm-user/repos/client
+       executable: /bin/bash
+    
+    - name: Installing the Backend Dependencies
+      command: npm install
+      args:
+       chdir: /home/ssm-user/repos/server/lambda
+       executable: /bin/bash
+
+       # - name: Installing the Backend Dependencies
+       #command: npm start
+       #args:
+       #chdir: /home/ssm-user/repos/server/lambda
+       #executable: /bin/bash
+
+    - name: adding nginx user to root
+      become: true
+      become_user: root
+      shell: usermod -aG root nginx
+
+
+    - name: Creates directory
+      become: true
+      file:
+        path: /var/www/app
+        state: directory
+
+    - name: set the right permissions to app directories
+      become: true
+      become_user: root
+      shell: chown -R root:nginx /var/www/app
+
+    - name: make the build package
+      local_action: shell tar -c -z -f app.zip -C ../repos/client/build .
+      become: no
+
+    - name: Copy build package
+      copy:
+        src: "app.zip"
+        dest: "/home/ssm-user/app.zip"
+
+    - name: unpack build package
+      become: yes
+      shell: "tar -xf /home/ssm-user/app.zip -C /var/www/app"
+
+
+    - name: Copy nginx config files
+      copy:
+        src: "../repos/files/nginx.conf"
+        dest: "/etc/nginx/nginx.conf"
+        mode: 0644
+
+    - name: Update client nginx config  
+      copy:
+        src: "../repos/files/client.conf"
+        dest: "/etc/nginx/conf.d/client.conf"
+        mode: 0644
+
+    - name: Enable Nginx
+      service: name=nginx enabled=yes
+      become: yes
+
+    - name: restart nginx
+      service:
+         name: nginx
+         state: restarted
