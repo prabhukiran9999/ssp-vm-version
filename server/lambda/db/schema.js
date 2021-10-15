@@ -3,7 +3,7 @@
  */
 
 const collections = {
-  GREETINGS: 'ssp-greetings',
+  GREETINGS: 'ssp-greetings-vm',
 };
 
 const schema = [
