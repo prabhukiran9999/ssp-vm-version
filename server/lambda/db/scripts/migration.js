@@ -17,7 +17,7 @@ const db = new AWS.DynamoDB();
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 
 // DynamoDB
-const greetingsTable = `ssp-greetings-${databaseSuffix}`;
+const greetingsTable = `ssp-greetings-vm-${databaseSuffix}`;
 
 const keypress = async () => {
   process.stdin.setRawMode(false);
