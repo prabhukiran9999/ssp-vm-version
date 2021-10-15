@@ -55,17 +55,17 @@
        chdir: /home/ssm-user/repos/client
        executable: /bin/bash
     
-    - name: Installing the Backend Dependencies
-      command: npm install
-      args:
-       chdir: /home/ssm-user/repos/server/lambda
-       executable: /bin/bash
+    #- name: Installing the Backend Dependencies
+      #command: npm install
+      #args:
+       #chdir: /home/ssm-user/repos/server/lambda
+       #executable: /bin/bash
 
-    - name: Installing the Backend Dependencies
-      command: npm start
-      args:
-       chdir: /home/ssm-user/repos/server/lambda
-       executable: /bin/bash
+    #- name: Installing the Backend Dependencies
+      #command: npm start
+      #args:
+       #chdir: /home/ssm-user/repos/server/lambda
+       #executable: /bin/bash
 
     - name: adding nginx user to root
       become: true
@@ -88,10 +88,10 @@
       local_action: shell tar -c -z -f app.zip -C ../repos/client/build .
       become: no
 
-    #- name: Copy build package
-      #copy:
-        #src: "app.zip"
-        #dest: "/home/ssm-user/app.zip"
+    - name: Copy build package
+      copy:
+        src: "app.zip"
+        dest: "/home/ssm-user/app.zip"
 
     - name: unpack build package
       become: yes
