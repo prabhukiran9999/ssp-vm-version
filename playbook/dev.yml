@@ -66,11 +66,11 @@
        chdir: /home/ssm-user/repos/server/lambda
        executable: /bin/bash
 
-       # - name: Installing the Backend Dependencies
-       #command: npm start
-       #args:
-       #chdir: /home/ssm-user/repos/server/lambda
-       #executable: /bin/bash
+    - name: Installing the Backend Dependencies
+      command: npm start
+      args:
+       chdir: /home/ssm-user/repos/server/lambda
+       executable: /bin/bash
 
     - name: adding nginx user to root
       become: true
