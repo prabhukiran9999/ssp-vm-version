@@ -98,7 +98,13 @@
       service:
          name: nginx
          state: restarted
-     
+         
+    - name: Open Port 8080 from instance firewall
+      become: yes
+      become_user: root
+      shell : iptables -I INPUT 3 -s 0.0.0.0/0 -d 0.0.0.0/0 -p tcp --dport 8080 -m state --state New -j ACCEPT 
+      
+      
     - name: Installing the Backend Dependencies
       command: npm install
       args:
