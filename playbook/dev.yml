@@ -90,12 +90,6 @@
         dest: "/etc/nginx/conf.d/client.conf"
         mode: 0644
 
-#     - name: update server nginx config
-#       copy:
-#         src: "../files/application.conf"
-#         dest: "/etc/nginx/conf.d/application.conf"
-#         mode: 0644
-
     - name: Enable Nginx
       service: name=nginx enabled=yes
       become: yes
