@@ -7,14 +7,6 @@
       become_user: root
       shell: yum install -y git
 
-    #- name: cloning the repo
-      #git:
-       #repo: https://github.com/prabhukiran9999/ssp-vm-version.git
-       #dest: /home/ssm-user/repos/
-       #clone: yes
-       #update: yes
-       #force: yes
-
     - name: install curl
       yum:
         name: curl
@@ -55,18 +47,6 @@
        chdir: /home/ssm-user/repos/client
        executable: /bin/bash
     
-    #- name: Installing the Backend Dependencies
-      #command: npm install
-      #args:
-       #chdir: /home/ssm-user/repos/server/lambda
-       #executable: /bin/bash
-
-    #- name: Installing the Backend Dependencies
-      #command: npm start
-      #args:
-       #chdir: /home/ssm-user/repos/server/lambda
-       #executable: /bin/bash
-
     - name: adding nginx user to root
       become: true
       become_user: root
@@ -82,20 +62,20 @@
     - name: set the right permissions to app directories
       become: true
       become_user: root
-      shell: chown -R root:nginx /var/www/app
+      shell: sudo find /var/www -type d -exec chmod -R 755 {} \;
+      
+    - name: set the right permissions to app files
+      become: true
+      become_user: root
+      shell: sudo find /var/www -type f -exec chmod -R 644 {} \;
 
     - name: make the build package
       local_action: shell tar -c -z -f app.zip -C ../client/build .
-      become: no
-
-    - name: Copy build package
-      copy:
-        src: "app.zip"
-        dest: "/home/ssm-user/app.zip"
+      become: yes
 
     - name: unpack build package
       become: yes
-      shell: "tar -xf /home/ssm-user/app.zip -C /var/www/app"
+      shell: "tar -xf /home/ssm-user/repos/playbook/app.zip -C /var/www/app"
 
 
     - name: Copy nginx config files
