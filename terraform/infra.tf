@@ -1,19 +1,23 @@
+provider "aws" {
+  region = var.aws_region
+}
 
 /* Dynamo DB Table */
 resource "aws_dynamodb_table" "ssp-greetings" {
   name      = "ssp-greetings-vm"
   hash_key  = "pid"
-  range_key = "id"
+  range_key = "createdAt"
 
   billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 5
-  write_capacity = 5
+  read_capacity  = 20
+  write_capacity = 20
   attribute {
     name = "pid"
     type = "S"
   }
+
   attribute {
-    name = "id"
+    name = "createdAt"
     type = "S"
   }
 }
@@ -72,13 +76,11 @@ module "asg" {
 
   # Launch configuration creation
   lc_name = "example-lc"
-
-  image_id        = "ami-0a70476e631caa6d3"
+  image_id        = "ami-037c167242ac48a38"
   instance_type   = "t2.micro"
   security_groups = ["sg-03895fdd9a15adf6e"]
-  #associate_public_ip_address = true
-  #key_name = "ssp-instance"
-  #user_data = "${file("userdata.sh")}"
+  iam_instance_profile = "ssp_profile"
+  user_data = "${file("userdata.sh")}"
   
 
   # ebs_block_device = [
@@ -121,7 +123,179 @@ module "asg" {
   
 }
 
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "3.63.0"
+    }
+  }
+}
 
+resource "aws_iam_instance_profile" "ssp_profile" {
+  name = "ssp_profile"
+  role = aws_iam_role.ssp-db.name
+}
+
+resource "aws_iam_role" "ssp-db" {
+  name = "ssp-db"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "db_ssp" {
+  name        = "ssp_db"
+  #path        = "/"
+  description = "policy to give dybamodb permissions to ec2"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:GetItem",
+                "dynamodb:Query",
+                "dynamodb:UpdateItem",
+                "dynamodb:UpdateTable"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "dynamodb:ListTables",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "kms:DescribeKey",
+                "kms:GenerateDataKey*",
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": "kms:Decrypt",
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": "s3:GetEncryptionConfiguration",
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+         {
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:PutMetricData",
+                "ec2:DescribeVolumes",
+                "ec2:DescribeTags",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams",
+                "logs:DescribeLogGroups",
+                "logs:CreateLogStream",
+                "logs:CreateLogGroup"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParameter"
+            ],
+            "Resource": "arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:DescribeAssociation",
+                "ssm:GetDeployablePatchSnapshotForInstance",
+                "ssm:GetDocument",
+                "ssm:DescribeDocument",
+                "ssm:GetManifest",
+                "ssm:GetParameter",
+                "ssm:GetParameters",
+                "ssm:ListAssociations",
+                "ssm:ListInstanceAssociations",
+                "ssm:PutInventory",
+                "ssm:PutComplianceItems",
+                "ssm:PutConfigurePackageResult",
+                "ssm:UpdateAssociationStatus",
+                "ssm:UpdateInstanceAssociationStatus",
+                "ssm:UpdateInstanceInformation"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2messages:AcknowledgeMessage",
+                "ec2messages:DeleteMessage",
+                "ec2messages:FailMessage",
+                "ec2messages:GetEndpoint",
+                "ec2messages:GetMessages",
+                "ec2messages:SendReply"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ds:CreateComputer",
+                "ds:DescribeDirectories"
+            ],
+            "Resource": "*"
+        }
+
+        
+    ]
+  })
+}
+resource "aws_iam_role_policy_attachment" "test-attach" {
+  role       = aws_iam_role.ssp-db.name
+  policy_arn = aws_iam_policy.db_ssp.arn
+  
+}
 
 
 
