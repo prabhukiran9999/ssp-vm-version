@@ -17,10 +17,10 @@
       become_user: root
       shell: sudo amazon-linux-extras install nginx1
 
-    - name: starting nginx server
-      become: true
-      become_user: root
-      shell: systemctl start nginx.service
+    #- name: starting nginx server
+      #become: true
+      #become_user: root
+      #shell: systemctl start nginx.service
 
     - name: downloading the node.js
       become: true
