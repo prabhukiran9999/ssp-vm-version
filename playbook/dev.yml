@@ -68,6 +68,17 @@
       become: true
       become_user: root
       shell: sudo find /var/www -type f -exec chmod -R 644 {} \;
+      
+    - name: Change the SELinux type of the new /var/test_www/html/ content directory to the type of the default /var/www/html directory
+      become: true
+      become_user: root
+      shell: sudo semanage fcontext -a -e /var/www /var/test_www
+      
+    - name: Relabel the /var directory recursively:
+      become: yes
+      become_user: root
+      shell: sudo restorecon -Rv /var/
+
 
     - name: make the build package
       local_action: shell tar -c -z -f app.zip -C ../client/build .
