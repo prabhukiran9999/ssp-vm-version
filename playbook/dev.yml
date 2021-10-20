@@ -74,7 +74,7 @@
       become_user: root
       shell: sudo semanage fcontext -a -e /var/www /var/test_www
       
-    - name: Relabel the /var directory recursively:
+    - name: Relabel the /var directory recursively
       become: yes
       become_user: root
       shell: sudo restorecon -Rv /var/
