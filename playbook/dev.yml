@@ -1,16 +1,12 @@
 ---
  - hosts: localhost
    become: true
-   tasks:
-    - name: install git
-      become: true
-      become_user: root
-      shell: yum install -y git
-
+   tasks:    
     - name: install curl
       yum:
         name: curl
         state: present
+        
     - name: install epel
       become: true
       become_user: root
@@ -59,15 +55,7 @@
         path: /var/www/app
         state: directory
 
-    - name: set the right permissions to app directories
-      become: true
-      become_user: root
-      shell: sudo find /var/www -type d -exec chmod -R 755 {} \;
-      
-    - name: set the right permissions to app files
-      become: true
-      become_user: root
-      shell: sudo find /var/www -type f -exec chmod -R 644 {} \;
+    
       
     #- name: Change the SELinux type of the new /var/test_www/html/ content directory to the type of the default /var/www/html directory
       #become: true
@@ -87,6 +75,16 @@
     - name: unpack build package
       become: yes
       shell: "tar -xf /home/ssm-user/repos/playbook/app.zip -C /var/www/app"
+      
+    - name: set the right permissions to app directories
+      become: true
+      become_user: root
+      shell: sudo find /var/www -type d -exec chmod -R 755 {} \;
+      
+    - name: set the right permissions to app files
+      become: true
+      become_user: root
+      shell: sudo find /var/www -type f -exec chmod -R 644 {} \;  
 
 
     - name: Copy nginx config files
