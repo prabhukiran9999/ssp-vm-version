@@ -1,3 +1,11 @@
+variable "target_env" {
+  description = "AWS workload account env (e.g. dev, test, prod, sandbox, unclass)"
+}
+
+variable "target_aws_account_id" {
+  description = "AWS workload account id"
+}
+
 variable "alb_name" {
   description = "Name of the internal alb"
   default     = "default"
@@ -15,12 +23,16 @@ variable "service_names" {
   default     = ["ssp-vm", "startup-app-vm"]
   type        = list(string)
 }
-# variable "target_env" {
-#   description = "AWS workload account env (e.g. dev, test, prod, sandbox, unclass)"
-# }
+
 variable "common_tags" {
   description = "Common tags for created resources"
   default = {
     Application = "Startup Sample"
   }
+}
+
+variable "aws_region" {
+  description = "region of the aws"
+  default     = "ca-central-1"
+  type        = string
 }
