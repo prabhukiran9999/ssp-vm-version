@@ -55,19 +55,6 @@
         path: /var/www/app
         state: directory
 
-    
-      
-    #- name: Change the SELinux type of the new /var/test_www/html/ content directory to the type of the default /var/www/html directory
-      #become: true
-      #become_user: root
-      #shell: sudo semanage fcontext -a -e /var/www /var/test_www
-      
-    #- name: Relabel the /var directory recursively
-      #become: yes
-      #become_user: root
-      #shell: sudo restorecon -Rv /var/
-
-
     - name: make the build package
       local_action: shell tar -c -z -f app.zip -C ../client/build .
       become: yes
@@ -85,6 +72,16 @@
       become: true
       become_user: root
       shell: sudo find /var/www -type f -exec chmod -R 644 {} \;  
+      
+    - name: Change the SELinux type of the new /var/test_www/html/ content directory to the type of the default /var/www/html directory
+      become: true
+      become_user: root
+      shell: sudo semanage fcontext -a -e /var/www /var/test_www
+      
+    - name: Relabel the /var directory recursively
+      become: yes
+      become_user: root
+      shell: sudo restorecon -Rv /var/
 
 
     - name: Copy nginx config files
@@ -112,6 +109,12 @@
       become: yes
       become_user: root
       shell : iptables -I INPUT 3 -s 0.0.0.0/0 -d 0.0.0.0/0 -p tcp --dport 8080 -m state --state New -j ACCEPT 
+      
+      
+    - name: SELinux denied permission to make outgoing network connections
+      become: yes
+      become_user: root
+      shell: setsebool -P httpd_can_network_connect 1
       
       
     - name: Installing the Backend Dependencies
