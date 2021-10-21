@@ -32,7 +32,7 @@ jobs:
             cd terraform/
             cat <<EOF > backend.hcl
             organization = "${{ env.organization }}"
-            workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}" }
+            workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-ssp-vm" }
             EOF
             
             terraform init -backend-config=backend.hcl
