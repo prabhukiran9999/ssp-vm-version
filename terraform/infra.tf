@@ -1,14 +1,14 @@
-terraform {
-  backend "remote" {}
-}
+# terraform {
+#   backend "remote" {}
+# }
 
 
 
 provider "aws" {
   region = var.aws_region
-  assume_role {
-    role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
-  }
+  # assume_role {
+  #   role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
+  # }
 }
 
 /* Dynamo DB Table */
@@ -84,7 +84,7 @@ module "asg" {
   name = "asg-instances"
 
   # Launch configuration creation
-  lc_name = "example-lc"
+  lc_name = "sssp-vm-lc"
   image_id        = "ami-037c167242ac48a38"
   instance_type   = "t2.micro"
   security_groups = ["sg-03895fdd9a15adf6e"]
@@ -109,7 +109,7 @@ module "asg" {
   ]
 
   # Auto scaling group creation
-  asg_name                  = "example-asg"
+  asg_name                  = "ssp-vm-asg"
   vpc_zone_identifier       = ["subnet-048e25be105ae01d3", "subnet-0896ff158c3ecdc53"]
   health_check_type         = "EC2"
   min_size                  = 0
@@ -188,12 +188,12 @@ resource "aws_iam_policy" "db_ssp" {
             ],
             "Resource": "*"
         },
-        {
-            "Sid": "VisualEditor1",
-            "Effect": "Allow",
-            "Action": "dynamodb:ListTables",
-            "Resource": "*"
-        },
+        # {
+        #     "Sid": "VisualEditor1",
+        #     "Effect": "Allow",
+        #     "Action": "dynamodb:ListTables",
+        #     "Resource": "*"
+        # },
         {
             "Action": [
                 "kms:DescribeKey",
@@ -305,7 +305,3 @@ resource "aws_iam_role_policy_attachment" "test-attach" {
   policy_arn = aws_iam_policy.db_ssp.arn
   
 }
-
-
-
-
