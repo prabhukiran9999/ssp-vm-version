@@ -26,7 +26,7 @@ jobs:
 
         - name: Deploying startup-sample-project using terraform
           run: |
-            cd terraform
+            cd ./terraform
             cat <<EOF > backend.hcl
             organization = "${{ env.organization }}"
             workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
