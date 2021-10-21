@@ -1,14 +1,14 @@
-# terraform {
-#   backend "remote" {}
-# }
+ terraform {
+   backend "remote" {}
+ }
 
 
 
 provider "aws" {
   region = var.aws_region
-  # assume_role {
-  #   role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
-  # }
+   assume_role {
+     role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
+   }
 }
 
 /* Dynamo DB Table */
@@ -58,7 +58,7 @@ resource "aws_alb_target_group" "app" {
     unhealthy_threshold = "2"
   }
 
-  #tags = local.common_tags
+
 }
 
 resource "aws_lb_listener_rule" "host_based_weighted_routing" {
@@ -84,22 +84,15 @@ module "asg" {
   name = "asg-instances"
 
   # Launch configuration creation
-  lc_name = "sssp-vm-lc"
-  image_id        = "ami-037c167242ac48a38"
-  instance_type   = "t2.micro"
-  security_groups = ["sg-03895fdd9a15adf6e"]
+  lc_name              = "sssp-vm-lc"
+  image_id             = "ami-037c167242ac48a38"
+  instance_type        = "t2.micro"
+  security_groups      = ["sg-03895fdd9a15adf6e"]
   iam_instance_profile = "ssp_profile"
-  user_data = "${file("userdata.sh")}"
-  
+  user_data            = file("userdata.sh")
 
-  # ebs_block_device = [
-  #   {
-  #     device_name           = "/dev/xvdz"
-  #     volume_type           = "gp2"
-  #     volume_size           = "50"
-  #     delete_on_termination = true
-  #   },
-  # ]
+
+
 
   root_block_device = [
     {
@@ -112,15 +105,13 @@ module "asg" {
   asg_name                  = "ssp-vm-asg"
   vpc_zone_identifier       = ["subnet-048e25be105ae01d3", "subnet-0896ff158c3ecdc53"]
   health_check_type         = "EC2"
-  min_size                  = 0
+  min_size                  = 1
   max_size                  = 1
   desired_capacity          = 1
   wait_for_capacity_timeout = 0
   health_check_grace_period = 500
   target_group_arns         = [aws_alb_target_group.app.arn]
-  
-  #service_linked_role_arn= "arn:aws:iam::813318847992:role/asg_role"
-  #target_group_arns         = [module.alb.target_group_arns[0]]
+
 
   tags = [
     {
@@ -129,13 +120,13 @@ module "asg" {
       propagate_at_launch = true
     },
   ]
-  
+
 }
 
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "3.63.0"
     }
   }
@@ -166,142 +157,136 @@ EOF
 }
 
 resource "aws_iam_policy" "db_ssp" {
-  name        = "ssp_db"
-  #path        = "/"
+  name = "ssp_db"
+
   description = "policy to give dybamodb permissions to ec2"
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-                "dynamodb:UpdateItem",
-                "dynamodb:UpdateTable"
-            ],
-            "Resource": "*"
-        },
-        # {
-        #     "Sid": "VisualEditor1",
-        #     "Effect": "Allow",
-        #     "Action": "dynamodb:ListTables",
-        #     "Resource": "*"
-        # },
-        {
-            "Action": [
-                "kms:DescribeKey",
-                "kms:GenerateDataKey*",
-                "kms:Decrypt",
-                "kms:Encrypt",
-                "kms:ReEncrypt*"
-            ],
-            "Resource": "*",
-            "Effect": "Allow"
-        },
-        {
-            "Action": "kms:Decrypt",
-            "Resource": "*",
-            "Effect": "Allow"
-        },
-        {
-            "Action": "s3:GetEncryptionConfiguration",
-            "Resource": "*",
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "s3:PutObject",
-                "s3:PutObjectAcl"
-            ],
-            "Resource": "*",
-            "Effect": "Allow"
-        },
-         {
-            "Effect": "Allow",
-            "Action": [
-                "cloudwatch:PutMetricData",
-                "ec2:DescribeVolumes",
-                "ec2:DescribeTags",
-                "logs:PutLogEvents",
-                "logs:DescribeLogStreams",
-                "logs:DescribeLogGroups",
-                "logs:CreateLogStream",
-                "logs:CreateLogGroup"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ssm:GetParameter"
-            ],
-            "Resource": "arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ssm:DescribeAssociation",
-                "ssm:GetDeployablePatchSnapshotForInstance",
-                "ssm:GetDocument",
-                "ssm:DescribeDocument",
-                "ssm:GetManifest",
-                "ssm:GetParameter",
-                "ssm:GetParameters",
-                "ssm:ListAssociations",
-                "ssm:ListInstanceAssociations",
-                "ssm:PutInventory",
-                "ssm:PutComplianceItems",
-                "ssm:PutConfigurePackageResult",
-                "ssm:UpdateAssociationStatus",
-                "ssm:UpdateInstanceAssociationStatus",
-                "ssm:UpdateInstanceInformation"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ds:CreateComputer",
-                "ds:DescribeDirectories"
-            ],
-            "Resource": "*"
-        }
 
-        
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "VisualEditor0",
+        "Effect" : "Allow",
+        "Action" : [
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:GetItem",
+          "dynamodb:Query",
+          "dynamodb:UpdateItem",
+          "dynamodb:UpdateTable"
+        ],
+        "Resource" : "*"
+      },
+
+      {
+        "Action" : [
+          "kms:DescribeKey",
+          "kms:GenerateDataKey*",
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:ReEncrypt*"
+        ],
+        "Resource" : "*",
+        "Effect" : "Allow"
+      },
+      {
+        "Action" : "kms:Decrypt",
+        "Resource" : "*",
+        "Effect" : "Allow"
+      },
+      {
+        "Action" : "s3:GetEncryptionConfiguration",
+        "Resource" : "*",
+        "Effect" : "Allow"
+      },
+      {
+        "Action" : [
+          "s3:PutObject",
+          "s3:PutObjectAcl"
+        ],
+        "Resource" : "*",
+        "Effect" : "Allow"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "cloudwatch:PutMetricData",
+          "ec2:DescribeVolumes",
+          "ec2:DescribeTags",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams",
+          "logs:DescribeLogGroups",
+          "logs:CreateLogStream",
+          "logs:CreateLogGroup"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:GetParameter"
+        ],
+        "Resource" : "arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:DescribeAssociation",
+          "ssm:GetDeployablePatchSnapshotForInstance",
+          "ssm:GetDocument",
+          "ssm:DescribeDocument",
+          "ssm:GetManifest",
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:ListAssociations",
+          "ssm:ListInstanceAssociations",
+          "ssm:PutInventory",
+          "ssm:PutComplianceItems",
+          "ssm:PutConfigurePackageResult",
+          "ssm:UpdateAssociationStatus",
+          "ssm:UpdateInstanceAssociationStatus",
+          "ssm:UpdateInstanceInformation"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ec2messages:AcknowledgeMessage",
+          "ec2messages:DeleteMessage",
+          "ec2messages:FailMessage",
+          "ec2messages:GetEndpoint",
+          "ec2messages:GetMessages",
+          "ec2messages:SendReply"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ds:CreateComputer",
+          "ds:DescribeDirectories"
+        ],
+        "Resource" : "*"
+      }
+
+
     ]
   })
 }
 resource "aws_iam_role_policy_attachment" "test-attach" {
   role       = aws_iam_role.ssp-db.name
   policy_arn = aws_iam_policy.db_ssp.arn
-  
+
 }
