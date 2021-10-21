@@ -17,15 +17,19 @@ jobs:
       matrix:
         node-version: [12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+        
     steps:
-        - uses: hashicorp/setup-terraform@v1
-          with:
+      - name: checkout the repo and building the Backend    
+        uses: actions/checkout@v2    
+
+    
+      - uses: hashicorp/setup-terraform@v1
+        with:
             terraform_version: ${{ env.TF_VERSION }}
             cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
 
-        - name: Deploying startup-sample-project using terraform
-          run: |
+      - name: Deploying startup-sample-project using terraform
+        run: |
             cd terraform/
             cat <<EOF > backend.hcl
             organization = "${{ env.organization }}"
