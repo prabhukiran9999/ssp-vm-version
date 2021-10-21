@@ -1,6 +1,6 @@
 # This workflow will apply the terraform scripts which would deploy the recquied infrastructure and the startup-sample-app
 
-name: Terraform Apply
+name: CI-CD 
 
 on:
   push:
