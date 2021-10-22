@@ -87,6 +87,7 @@ module "asg" {
   lc_name              = "sssp-vm-lc"
   image_id             = "ami-037c167242ac48a38"
   instance_type        = "t2.micro"
+  spot_price            = "0.0038"
   security_groups      = ["sg-03895fdd9a15adf6e"]
   iam_instance_profile = "ssp_profile"
   user_data            = file("userdata.sh")
