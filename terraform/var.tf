@@ -7,7 +7,7 @@
  }
 variable "GITHUB_REPOSITORY" {
   description = "Name of the git repo to clone"
-  default     = "github.com/prabhukiran9999/ssp-vm-version/tree/master"
+  default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/dev"
   type        = string
 }
 variable "target_group_name" {
