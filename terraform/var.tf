@@ -7,7 +7,7 @@
  }
 variable "GITHUB_REPOSITORY" {
   description = "Name of the git repo to clone"
-  default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/dev"
+  default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/main"
   type        = string
 }
 variable "target_group_name" {
