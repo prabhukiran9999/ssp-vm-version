@@ -27,7 +27,7 @@ jobs:
         with:
             terraform_version: ${{ env.TF_VERSION }}
             cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
-            $GITHUB_REPOSITORY: prabhukiran9999/ssp-vm-version
+            
 
       - name: Deploying startup-sample-project using terraform
         run: |
