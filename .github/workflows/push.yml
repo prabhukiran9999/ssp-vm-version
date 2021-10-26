@@ -36,4 +36,4 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            terraform apply -var="$git_repo" -auto-approve
+            terraform apply -var="git_repo=$git_repo" -auto-approve
