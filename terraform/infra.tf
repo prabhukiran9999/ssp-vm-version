@@ -79,7 +79,7 @@ resource "aws_lb_listener_rule" "host_based_weighted_routing" {
 data "template_file" "userdata_script" {
 template = file("userdata.tpl")
 vars = {
-git_repo           = var.GITHUB_REPOSITORY
+git_repo           = var.git_repo
 }
 }
 
