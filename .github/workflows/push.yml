@@ -32,6 +32,7 @@ jobs:
             cat <<EOF > backend.hcl
             organization = "${{ env.organization }}"
             workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-ssp-vm" }
+            GITHUB_REPOSITORY: "${{ env.GITHUB_REPOSITORY }}"
             EOF
             
             terraform init -backend-config=backend.hcl
