@@ -27,7 +27,7 @@ jobs:
         with:
             terraform_version: ${{ env.TF_VERSION }}
             cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
-            args: 
+            
           
             
 
