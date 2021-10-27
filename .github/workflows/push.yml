@@ -27,7 +27,7 @@ jobs:
         with:
             terraform_version: ${{ env.TF_VERSION }}
             cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
-            args:
+          
             
 
       - name: Deploying startup-sample-project using terraform
@@ -41,4 +41,4 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            terraform destroy -auto-approve
+            terraform apply -auto-approve
