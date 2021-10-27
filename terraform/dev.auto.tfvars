@@ -1,2 +1,2 @@
-#git_repo = "github.com/prabhukiran9999/ssp-vm-version"
+git_repo = "github.com/prabhukiran9999/ssp-vm-version"
 
