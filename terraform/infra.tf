@@ -76,9 +76,7 @@ resource "aws_lb_listener_rule" "host_based_weighted_routing" {
   }
 }
   
-data "external" "git-branch" {
-    program = ["/bin/bash", "-c", "jq -n --arg branch `git rev-parse --abbrev-ref HEAD` '{\"branch\":$branch}'"]
-}
+
   
 data "template_file" "userdata_script" {
 template = file("userdata.tpl")
