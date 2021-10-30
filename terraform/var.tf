@@ -10,11 +10,7 @@ variable "git_repo" {
   #default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/dev"
   type        = string
 }
-variable "git_branch" {
-  description = "Name of the git branch to clone"
-  
-  type        = string
-}
+
 variable "target_group_name" {
   description = "Name of the target group"
   default     = "sample-target-group-vm"
