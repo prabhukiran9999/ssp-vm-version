@@ -80,6 +80,7 @@ data "template_file" "userdata_script" {
 template = file("userdata.tpl")
 vars = {
 git_repo           = var.git_repo
+git_branch         = var.git_branch
 }
 }
 
