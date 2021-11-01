@@ -1,2 +1,2 @@
 git_repo = "github.com/bcgov/startup-sample-project-aws-virtual-machines"
-#git_branch= "dev"
+branch_name= "$BRANCH_NAME"
