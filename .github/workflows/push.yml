@@ -45,5 +45,5 @@ jobs:
             
             terraform init -backend-config=backend.hcl
             
-            terraform apply -var="branch_name=$BRANCH_NAME" -auto-approve
+            terraform apply -auto-approve
 
