@@ -44,6 +44,6 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            
+            export TF_VAR_branch_name=$BRANCH_NAME
             terraform apply -auto-approve
 
