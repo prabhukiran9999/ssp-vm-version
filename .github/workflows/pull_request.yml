@@ -25,7 +25,7 @@ jobs:
         
       - name: setting variables
         run: | 
-               BRANCH_NAME=git branch | sed -n '/\* /s///p'
+               BRANCH_NAME= git branch | sed -n '/\* /s///p'
                echo $BRANCH_NAME
 
     
