@@ -22,6 +22,11 @@ jobs:
     steps:
       - name: checkout the repo and building the Backend    
         uses: actions/checkout@v2    
+        
+      - name: setting variables
+        run: | 
+               BRANCH_NAME=git branch | sed -n '/\* /s///p'
+               echo $BRANCH_NAME
 
     
       - uses: hashicorp/setup-terraform@v1
