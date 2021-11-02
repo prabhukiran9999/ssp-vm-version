@@ -21,7 +21,12 @@ jobs:
     steps:
       - name: checkout the repo and building the Backend    
       - uses: actions/checkout@v2
-      - run: echo "::set-env name=BRANCH_NAME::${{ github.head_ref }}"
+        with:
+          run: | 
+               echo "::set-env name=BRANCH_NAME::${{ github.head_ref }}"
+               echo $BRANCH_NAME
+                                    
+      
             
 
     
