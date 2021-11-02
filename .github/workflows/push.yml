@@ -25,7 +25,7 @@ jobs:
       
       - name: setting variables
         run: | 
-               echo "::set-env name=BRANCH_NAME::${{ github.head_ref }}"
+               BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
                echo $BRANCH_NAME
                                     
       
