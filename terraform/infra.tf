@@ -82,7 +82,7 @@ data "template_file" "userdata_script" {
 template = file("userdata.tpl")
 vars = {
 git_repo           = var.git_repo
-#git_branch= data.external.git-branch.result.branch
+BRNACH_NAME        = var.BRANCH_NAME
 }
 }
 
