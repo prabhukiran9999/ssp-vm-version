@@ -11,7 +11,8 @@ env:
   TF_VERSION: 1.0.9
   environment: dev
   organization: bcgov
-  branch_name: GITHUB_HEAD_REF
+  BASE_BRANCH: ${{ github.base_ref }}
+  
 jobs:
   build:
 
@@ -25,10 +26,10 @@ jobs:
         
       - name: setting variables
         run: | 
-              
+               
                cat <<EOF > dev.auto.tfvars
-               branch_name="${{ env.branch_name }}"
-               echo branch_name
+               
+               echo "Pull request's base branch is: ${BASE_BRANCH}"
                EOF
 
     
