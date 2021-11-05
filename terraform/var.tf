@@ -7,12 +7,12 @@
  }
 variable "git_repo" {
   description = "Name of the git repo to clone"
-  #default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/dev"
+  default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/dev"
   type        = string
 }
 variable "branch_name" {
   description = "Name of the git repo to clone"
-  
+  default     = "main"
   type        = string
 }
 
