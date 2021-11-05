@@ -40,8 +40,6 @@ jobs:
 
       - name: Deploying startup-sample-project using terraform
         uses: hashicorp/setup-terraform@v1
-        with:
-           args: -var-file dev.auto.tfvars
       - run: |
             cd terraform/
             cat <<EOF > backend.hcl
@@ -50,4 +48,4 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            terraform apply -auto-approve
+            terraform apply -var-file=dev.auto.tfvars -auto-approve
