@@ -26,11 +26,9 @@ jobs:
         
       - name: setting variables
         run: | 
-               
-               cat <<EOF > dev.auto.tfvars
-               
-               echo "Pull request's base branch is: ${PR_BRANCH}"
-               EOF
+             cat <<EOF > dev.auto.tfvars
+             echo "Pull request's base branch is: ${PR_BRANCH}"
+             EOF
 
     
       - uses: hashicorp/setup-terraform@v1
