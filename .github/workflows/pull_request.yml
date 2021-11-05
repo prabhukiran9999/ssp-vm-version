@@ -25,8 +25,11 @@ jobs:
         
       - name: setting variables
         run: | 
-               BRANCH_NAME= git branch | sed -n '/\* /s///p'
+               BRANCH_NAME= $(git rev-parse --abbrev-ref HEAD)
                echo $BRANCH_NAME
+               cat <<EOF > dev.auto.tfvars
+               branch_name=$BRANCH_NAME
+               EOF
 
     
       - uses: hashicorp/setup-terraform@v1
