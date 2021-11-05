@@ -25,10 +25,9 @@ jobs:
         
       - name: setting variables
         run: | 
-              
+               echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_HEAD_REF})"
                cat <<EOF > dev.auto.tfvars
-               branch_name="${{ env.branch_name }}"
-               echo branch_name
+               echo 'BRANCH_NAME'
                EOF
 
     
