@@ -10,7 +10,7 @@ variable "git_repo" {
   default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/dev"
   type        = string
 }
-variable "branch_name" {
+variable "BRANCH_NAME" {
   description = "Name of the git repo to clone"
   default     = "main"
   type        = string
