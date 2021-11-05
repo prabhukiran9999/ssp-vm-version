@@ -27,8 +27,6 @@ jobs:
       - name: setting variables
         run: | 
              cat <<EOF > dev.auto.tfvars
-             cat dev.auto.tfvars
-             echo "Pull request's base branch is: ${PR_BRANCH}"
              BRANCH_NAME = "${{ env.PR_BRANCH }}"
              EOF
 
@@ -48,4 +46,4 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            terraform apply -var-file=dev.auto.tfvars -auto-approve
+            terraform apply -auto-approve
