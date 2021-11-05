@@ -39,7 +39,9 @@ jobs:
             cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
 
       - name: Deploying startup-sample-project using terraform
-        run: |
+        with:
+           args: -var-file dev.auto.tfvars
+      - run: |
             cd terraform/
             cat <<EOF > backend.hcl
             organization = "${{ env.organization }}"
