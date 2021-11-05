@@ -25,7 +25,7 @@ jobs:
         
       - name: setting variables
         run: | 
-               BRANCH_NAME= git rev-parse --abbrev-ref HEAD
+               BRANCH_NAME= ${GITHUB_HEAD_REF}
                echo $BRANCH_NAME
                cat <<EOF > dev.auto.tfvars
                branch_name=$BRANCH_NAME
