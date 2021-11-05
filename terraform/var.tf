@@ -7,7 +7,7 @@
  }
 variable "git_repo" {
   description = "Name of the git repo to clone"
-  default     = "github.com/bcgov/startup-sample-project-aws-virtual-machines/tree/dev"
+  default     = "github.com/prabhukiran9999/ssp-vm-version.git"
   type        = string
 }
 variable "BRANCH_NAME" {
