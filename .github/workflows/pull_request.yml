@@ -29,6 +29,7 @@ jobs:
              cat <<EOF > dev.auto.tfvars
              cat dev.auto.tfvars
              echo "Pull request's base branch is: ${PR_BRANCH}"
+             BRANCH_NAME = "${{ env.oPR_BRANCH }}"
              EOF
 
     
