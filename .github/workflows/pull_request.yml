@@ -39,6 +39,7 @@ jobs:
             cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
 
       - name: Deploying startup-sample-project using terraform
+        uses: hashicorp/setup-terraform@v1
         with:
            args: -var-file dev.auto.tfvars
       - run: |
