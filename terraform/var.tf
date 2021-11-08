@@ -12,7 +12,7 @@ variable "git_repo" {
 }
 variable "BRANCH_NAME" {
   description = "Name of the git repo to clone"
-  default     = "main"
+  default     = "master"
   type        = string
 }
 variable "sha" {
