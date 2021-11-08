@@ -45,6 +45,7 @@ jobs:
             organization = "${{ env.organization }}"
             workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-ssp-vm" }
             EOF
+            readlink -f backend.hcl
             
             terraform init -backend-config=backend.hcl
             terraform plan -auto-approve
