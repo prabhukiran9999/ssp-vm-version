@@ -15,8 +15,10 @@ variable "BRANCH_NAME" {
   default     = "main"
   type        = string
 }
-
-
+variable "sha" {
+  description = "Id of the git commit to checkout"
+  type        = string
+}
 variable "target_group_name" {
   description = "Name of the target group"
   default     = "sample-target-group-vm"
