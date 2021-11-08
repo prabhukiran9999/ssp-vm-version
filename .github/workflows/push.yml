@@ -11,7 +11,7 @@ env:
   environment: dev
   organization: bcgov
   SHA: ${{ github.sha }}
-  git_url: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY	
+  GIT_URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY	
 
   
 jobs:
@@ -29,6 +29,7 @@ jobs:
              cd terraform/
              cat <<EOF > dev.auto.tfvars
              sha = "${{ env.SHA }}"
+             git_url= "${{ env.git_url }}"
              EOF
              echo ${{ env.git_url }}
                                     
