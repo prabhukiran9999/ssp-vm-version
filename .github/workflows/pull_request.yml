@@ -30,6 +30,7 @@ jobs:
              BRANCH_NAME = "${{ env.PR_BRANCH }}"
              EOF
              cat dev.auto.tfvars
+             grep dev.auto.tfvars
 
     
       - uses: hashicorp/setup-terraform@v1
