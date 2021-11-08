@@ -29,7 +29,7 @@ jobs:
              cat <<EOF > dev.auto.tfvars
              BRANCH_NAME = "${{ env.PR_BRANCH }}"
              EOF
-             cat dev.auto.tfvars
+             readlink -f dev.auto.tfvars
 
     
       - uses: hashicorp/setup-terraform@v1
