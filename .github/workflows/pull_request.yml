@@ -29,6 +29,7 @@ jobs:
              cat <<EOF > dev.auto.tfvars
              BRANCH_NAME = "${{ env.PR_BRANCH }}"
              EOF
+             cat dev.auto.tfvars
 
     
       - uses: hashicorp/setup-terraform@v1
@@ -46,4 +47,4 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            terraform apply -auto-approve
+            terraform plan -auto-approve
