@@ -10,11 +10,6 @@ variable "git_repo" {
   default     = "github.com/prabhukiran9999/ssp-vm-version.git"
   type        = string
 }
-variable "BRANCH_NAME" {
-  description = "Name of the git repo to clone"
-  default     = "master"
-  type        = string
-}
 variable "sha" {
   description = "Id of the git commit to checkout"
   type        = string
