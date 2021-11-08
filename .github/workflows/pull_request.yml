@@ -47,4 +47,4 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            terraform plan -auto-approve
+            terraform plan -var-file="dev.auto.tfvars"
