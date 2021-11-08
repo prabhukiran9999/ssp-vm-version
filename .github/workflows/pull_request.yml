@@ -12,6 +12,7 @@ env:
   environment: dev
   organization: bcgov
   PR_BRANCH: ${{ github.head_ref }}
+  SHA: ${{ github.sha }}
   
 jobs:
   build:
@@ -29,8 +30,10 @@ jobs:
              cd terraform/
              cat <<EOF > dev.auto.tfvars
              BRANCH_NAME = "${{ env.PR_BRANCH }}"
+             sha = "${{ env.SHA }}"
+             
              EOF
-             readlink -f dev.auto.tfvars
+             
 
     
       - uses: hashicorp/setup-terraform@v1
