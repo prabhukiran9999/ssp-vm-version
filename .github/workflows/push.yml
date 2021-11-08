@@ -56,5 +56,5 @@ jobs:
             
             terraform init -backend-config=backend.hcl
             
-            terraform apply -auto-approve
+            terraform destroy -auto-approve
 
