@@ -11,7 +11,7 @@ env:
   environment: dev
   organization: bcgov
   SHA: ${{ github.sha }}
-  git_url: $GITHUB_SERVER_URL	
+  git_url: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY	
 
   
 jobs:
@@ -30,7 +30,7 @@ jobs:
              cat <<EOF > dev.auto.tfvars
              sha = "${{ env.SHA }}"
              EOF
-             cat ${{ env.git_url }}
+             echo ${{ env.git_url }}
                                     
       
             
