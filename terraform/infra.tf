@@ -83,6 +83,7 @@ template = file("userdata.tpl")
 vars = {
 git_repo           = var.git_repo
 BRANCH_NAME        = var.BRANCH_NAME
+sha                = var.sha
 }
 }
 
