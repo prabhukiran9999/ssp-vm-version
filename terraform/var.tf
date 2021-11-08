@@ -5,9 +5,9 @@
  variable "target_aws_account_id" {
    description = "AWS workload account id"
  }
-variable "git_repo" {
+variable "git_url" {
   description = "Name of the git repo to clone"
-  default     = "github.com/prabhukiran9999/ssp-vm-version.git"
+  default     = "https://github.com/prabhukiran9999/ssp-vm-version.git"
   type        = string
 }
 variable "sha" {
