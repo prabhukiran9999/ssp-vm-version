@@ -11,7 +11,7 @@ env:
   environment: dev
   organization: bcgov
   SHA: ${{ github.sha }}
-  
+  git_repo: ${{ GITHUB_SERVER_URL/GITHUB_REPOSITORY }}
   
   
 jobs:
@@ -30,7 +30,7 @@ jobs:
              cat <<EOF > dev.auto.tfvars
              sha = "${{ env.SHA }}"
              EOF
-             
+             cat ${{ env.git_repo }}
                                     
       
             
@@ -56,5 +56,5 @@ jobs:
             
             terraform init -backend-config=backend.hcl
             
-            terraform apply -auto-approve
+            terraform plan
 
