@@ -26,6 +26,7 @@ jobs:
         
       - name: setting variables
         run: | 
+             cd terraform/
              cat <<EOF > dev.auto.tfvars
              BRANCH_NAME = "${{ env.PR_BRANCH }}"
              EOF
@@ -47,4 +48,4 @@ jobs:
             EOF
             
             terraform init -backend-config=backend.hcl
-            terraform plan -auto-approve
+            terraform plan 
