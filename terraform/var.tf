@@ -7,7 +7,7 @@
  }
 variable "git_url" {
   description = "Name of the git repo to clone"
-  default     = "https://github.com/prabhukiran9999/ssp-vm-version.git"
+  default     = "github.com/prabhukiran9999/ssp-vm-version.git"
   type        = string
 }
 variable "sha" {
